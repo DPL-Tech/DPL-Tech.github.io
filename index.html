@@ -1,7 +1,77 @@
 <!DOCTYPE html>
-<html>
-<body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
-</body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Tech Dashboard</title>
+    <style>
+        /* 1. Basic Styles: Controls the overall page background, text color, and default font. */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Change this font! */
+            margin: 0;
+            padding: 0;
+            background-color: #2c3e50; /* Dark blue/grey background */
+            color: #ecf0f1; /* Light text color */
+            overflow: hidden;
+        }
+
+        /* 2. Slide Container Styles: Controls how each individual dashboard section (slide) looks. */
+        .slide {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            box-sizing: border-box;
+            padding: 30px; /* Padding inside each slide */
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #2c3e50; /* Should match body for seamless transition */
+            animation: fadeIn 1s ease-in-out; /* Fade in effect for new slides */
+        }
+
+        /* 3. Heading Styles: Controls the size and color of titles on each slide. */
+        .slide h2 {
+            color: #3498db; /* Bright blue for main headings */
+            font-size: 3em; /* Larger main heading */
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .slide h3 { /* Used for calendar subheadings */
+            color: #87CEEB; /* Lighter blue for subheadings */
+            font-size: 1.8em;
+            margin-top: 15px;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        /* 4. iframe Styles: Controls the appearance of the embedded AppSheet and Calendar content. */
+        iframe {
+            border: none;
+            width: 100%;
+            height: calc(100% - 100px); /* Adjust height for main heading */
+            background-color: #34495e; /* Slightly lighter background for iframes */
+            border-radius: 8px; /* Rounded corners for the embedded content */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+        }
+
+        /* 5. Specific Calendar Section Adjustments: Fine-tunes the layout for the two calendar iframes. */
+        #slide-calendars .calendar-container {
+            height: calc((100% - 160px) / 2);
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        #slide-calendars .calendar-container:last-child {
+            margin-bottom: 0;
+        }
+        #slide-calendars .calendar-container iframe {
+            height: calc(100% - 50px);
+        }
+
+        /* 6. Responsive Adjustments: Ensures the design looks good on different screen sizes (though Chromebox will likely be fixed). */
+        @media (max-width: 1200px) { /* ... */ }
+        @media (max-width: 768px) { /* ... */ }
+    </style>
+    <!-- ... rest of HTML and JavaScript ... -->
+</head>
 </html>
