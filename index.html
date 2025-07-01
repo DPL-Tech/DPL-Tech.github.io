@@ -4,102 +4,170 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library Tech Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-    /* 1. Basic Styles */
-    body {
-        font-family: 'Inter', sans-serif; /* Using Inter font */
-        margin: 0;
-        padding: 0;
-        background-color: #1a202c; /* Darker, almost black blue */
-        color: #e2e8f0; /* Off-white text */
-        overflow: hidden;
-    }
+        /* 1. Basic Styles */
+        body {
+            font-family: 'Inter', sans-serif; /* Using Inter font */
+            margin: 0;
+            padding: 0;
+            background-color: #1a202c; /* Darker, almost black blue */
+            color: #e2e8f0; /* Off-white text */
+            overflow: hidden; /* Hide scrollbars */
+        }
 
-    /* 2. Slide Container Styles */
-    .slide {
-        display: none;
-        width: 100vw;
-        height: 100vh;
-        box-sizing: border-box;
-        padding: 40px; /* More padding */
-        position: absolute;
-        top: 0;
-        left: 0;
-        background-color: #1a202c;
-        animation: fadeIn 1s ease-in-out;
-        display: flex; /* Use flexbox for vertical centering if content is short */
-        flex-direction: column;
-        justify-content: center; /* Center content vertically */
-        align-items: center; /* Center content horizontally */
-    }
+        /* 2. Slide Container Styles */
+        .slide {
+            display: none; /* Hidden by default by JavaScript */
+            width: 100vw; /* Full viewport width */
+            height: 100vh; /* Full viewport height */
+            box-sizing: border-box; /* Include padding in dimensions */
+            padding: 40px; /* More padding around content */
+            position: absolute; /* Position for overlaying slides */
+            top: 0;
+            left: 0;
+            background-color: #1a202c; /* Match body for seamless transition */
+            animation: fadeIn 1s ease-in-out; /* Fade in animation for new slides */
+            
+            /* Flexbox for vertical and horizontal centering of content within each slide */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center content vertically */
+            align-items: center; /* Center content horizontally */
+        }
 
-    @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
-    /* 3. Heading Styles */
-    .slide h2 {
-        color: #63b3ed; /* Brighter blue for main headings */
-        font-size: 3.5em; /* Even larger main heading */
-        margin-bottom: 30px;
-        text-align: center;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* Subtle text shadow */
-    }
-    .slide h3 {
-        color: #90cdf4; /* Lighter blue for subheadings */
-        font-size: 2em;
-        margin-top: 20px;
-        margin-bottom: 15px;
-        text-align: left;
-    }
+        /* 3. Heading Styles */
+        .slide h2 {
+            color: #63b3ed; /* Brighter blue for main headings */
+            font-size: 3.5em; /* Even larger main heading */
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* Subtle text shadow */
+        }
+        .slide h3 { /* Used for calendar subheadings */
+            color: #90cdf4; /* Lighter blue for subheadings */
+            font-size: 2em;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            text-align: left; /* Align subheadings left */
+        }
 
-    /* 4. iframe Styles */
-    iframe {
-        border: none;
-        width: 90%; /* Slightly narrower to give more margin */
-        max-width: 1400px; /* Max width for very wide screens */
-        height: calc(100% - 180px); /* Adjusted height for larger headings/padding */
-        background-color: #2d3748; /* Dark grey for iframe background */
-        border-radius: 12px; /* More rounded corners */
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Stronger shadow */
-        margin-top: auto; /* Push iframe to bottom if content is short */
-        margin-bottom: auto; /* Push iframe to top if content is short */
-    }
+        /* 4. iframe Styles - Applies to all AppSheet and Calendar embeds */
+        iframe {
+            border: none;
+            width: 90%; /* Slightly narrower to give more margin */
+            max-width: 1400px; /* Max width for very wide screens */
+            height: calc(100% - 180px); /* Adjusted height for larger headings/padding */
+            background-color: #2d3748; /* Dark grey for iframe background */
+            border-radius: 12px; /* More rounded corners */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Stronger shadow */
+            
+            /* Ensure iframe takes up available space within flex column */
+            margin-top: auto;
+            margin-bottom: auto;
+        }
 
-    /* 5. Specific Calendar Section Adjustments */
-    #slide-calendars .calendar-container {
-        height: calc((100% - 220px) / 2); /* Adjusted for new h2/padding */
-        margin-bottom: 25px;
-        display: flex;
-        flex-direction: column;
-        width: 90%; /* Match iframe width */
-        max-width: 1400px;
-    }
-    #slide-calendars .calendar-container:last-child {
-        margin-bottom: 0;
-    }
-    #slide-calendars .calendar-container iframe {
-        height: calc(100% - 60px); /* Adjusted iframe height within calendar container */
-        margin: 0; /* Remove auto margins for calendar iframes */
-    }
+        /* 5. Specific Calendar Section Adjustments - For the split calendar slide */
+        #slide-calendars .calendar-container {
+            height: calc((100% - 220px) / 2); /* Adjusted for new h2/padding and two calendar iframes */
+            margin-bottom: 25px; /* Spacing between the two calendar sections */
+            display: flex;
+            flex-direction: column; /* Stack h3 and iframe within container */
+            width: 90%; /* Match iframe width */
+            max-width: 1400px;
+        }
+        #slide-calendars .calendar-container:last-child {
+            margin-bottom: 0; /* No extra margin on the last calendar container */
+        }
+        #slide-calendars .calendar-container iframe {
+            height: calc(100% - 60px); /* Adjusted iframe height within its calendar container */
+            margin: 0; /* Remove auto margins for calendar iframes to allow calc to work */
+        }
 
-    /* Responsive Adjustments */
-    @media (max-width: 1200px) {
-        .slide h2 { font-size: 3em; }
-        .slide h3 { font-size: 1.7em; }
-        .slide { padding: 30px; }
-        iframe { height: calc(100% - 160px); }
-        #slide-calendars .calendar-container { height: calc((100% - 190px) / 2); }
-    }
-    @media (max-width: 768px) {
-        .slide h2 { font-size: 2.5em; }
-        .slide h3 { font-size: 1.5em; }
-        .slide { padding: 20px; }
-        iframe { height: calc(100% - 140px); width: 95%; }
-        #slide-calendars .calendar-container { height: calc((100% - 160px) / 2); width: 95%; }
-    }
-</style>
-    <!-- ... rest of HTML and JavaScript ... -->
+        /* 6. Responsive Adjustments (Optional, for different screen sizes) */
+        /* These media queries adjust sizes for smaller screens if ever viewed elsewhere */
+        @media (max-width: 1200px) {
+            .slide h2 { font-size: 3em; }
+            .slide h3 { font-size: 1.7em; }
+            .slide { padding: 30px; }
+            iframe { height: calc(100% - 160px); }
+            #slide-calendars .calendar-container { height: calc((100% - 190px) / 2); }
+        }
+        @media (max-width: 768px) {
+            .slide h2 { font-size: 2.5em; }
+            .slide h3 { font-size: 1.5em; }
+            .slide { padding: 20px; }
+            iframe { height: calc(100% - 140px); width: 95%; }
+            #slide-calendars .calendar-container { height: calc((100% - 160px) / 2); width: 95%; }
+        }
+    </style>
 </head>
+<body>
+
+    <div id="slide-tickets" class="slide">
+        <h2>Active Help Desk Tickets</h2>
+        <iframe src="https://www.appsheet.com/start/37945e99-01d5-4dac-ac8f-4ca0f700f77c#view=Open%20Tickets" title="Help Desk Tickets"></iframe>
+    </div>
+
+    <div id="slide-calendars" class="slide">
+        <h2>Today's Library Agenda & Appointments</h2>
+        <iframe src="https://calendar.google.com/calendar/embed?src=c_7ec31c77de4c2156389d656caffad1a76835fc9544b2063f3b342871538c88ad%40group.calendar.google.com&ctz=America%2FNew_York" style="border-width:0" width="100%" height="100%" frameborder="0" scrolling="no" title="Combined Calendar"></iframe>
+    </div>
+
+    <div id="slide-calendars" class="slide">
+        <h2>Today's Library Agenda & Appointments</h2>
+        <iframe src="https://calendar.google.com/calendar/embed?src=c_c2370403444f72ff9ea54b2e0a43efd7ff0a052bdd9eb88fec98b162eb755b23%40group.calendar.google.com&ctz=America%2FNew_York" style="border-width:0" width="100%" height="100%" frameborder="0" scrolling="no" title="Combined Calendar"></iframe>
+    </div>
+
+    <div id="slide-tasks" class="slide">
+        <h2>Priority Tasks Needing Completion</h2>
+        <iframe src="https://www.appsheet.com/start/5d47724f-4e0b-49d9-90fb-96af0b4a967a#view=Tasks%20Dashboard" title="Priority Tasks"></iframe>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        let currentSlideIndex = 0;
+        const slideInterval = 20000; // 20 seconds per slide (adjust as needed, 15000ms = 15s)
+        const pageReloadInterval = 300000; // Reload entire page every 5 minutes (300,000ms)
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                if (i === index) {
+                    slide.style.display = 'block';
+                    // Optional: Force reload iframe content when slide becomes visible
+                    // This is especially useful for AppSheet iframes to ensure fresh data
+                    const iframe = slide.querySelector('iframe');
+                    if (iframe && iframe.src) {
+                        iframe.src = iframe.src; // Reloads the iframe by resetting its source
+                    }
+                } else {
+                    slide.style.display = 'none';
+                }
+            });
+        }
+
+        function nextSlide() {
+            currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+            showSlide(currentSlideIndex);
+        }
+
+        // Initial display of the first slide
+        showSlide(currentSlideIndex);
+
+        // Start the automatic slideshow rotation
+        setInterval(nextSlide, slideInterval);
+
+        // Periodically reload the entire page to ensure all iframes (especially AppSheet)
+        // get a fresh start and sync the latest data, even if AppSheet's internal refresh
+        // isn't immediate or if the network temporarily drops.
+        setInterval(() => {
+            location.reload();
+        }, pageReloadInterval);
+    </script>
+</body>
 </html>
