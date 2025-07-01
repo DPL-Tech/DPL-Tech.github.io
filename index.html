@@ -73,7 +73,7 @@
         }
 
         /* 5. Specific Calendar Section Adjustments - For the split calendar slide */
-        #slide-calendars .calendar-container {
+        #slide-calendar-agenda .calendar-container { /* Corrected ID here */
             height: calc((100% - 220px) / 2); /* Adjusted for new h2/padding and two calendar iframes */
             margin-bottom: 25px; /* Spacing between the two calendar sections */
             display: flex;
@@ -81,10 +81,10 @@
             width: 90%; /* Match iframe width */
             max-width: 1400px;
         }
-        #slide-calendars .calendar-container:last-child {
+        #slide-calendar-agenda .calendar-container:last-child { /* Corrected ID here */
             margin-bottom: 0; /* No extra margin on the last calendar container */
         }
-        #slide-calendars .calendar-container iframe {
+        #slide-calendar-agenda .calendar-container iframe { /* Corrected ID here */
             height: calc(100% - 60px); /* Adjusted iframe height within its calendar container */
             margin: 0; /* Remove auto margins for calendar iframes to allow calc to work */
         }
@@ -96,14 +96,14 @@
             .slide h3 { font-size: 1.7em; }
             .slide { padding: 30px; }
             iframe { height: calc(100% - 160px); }
-            #slide-calendars .calendar-container { height: calc((100% - 190px) / 2); }
+            #slide-calendar-agenda .calendar-container { height: calc((100% - 190px) / 2); } /* Corrected ID here */
         }
         @media (max-width: 768px) {
             .slide h2 { font-size: 2.5em; }
             .slide h3 { font-size: 1.5em; }
             .slide { padding: 20px; }
             iframe { height: calc(100% - 140px); width: 95%; }
-            #slide-calendars .calendar-container { height: calc((100% - 160px) / 2); width: 95%; }
+            #slide-calendar-agenda .calendar-container { height: calc((100% - 160px) / 2); width: 95%; } /* Corrected ID here */
         }
     </style>
 </head>
@@ -111,22 +111,29 @@
 
     <div id="slide-tickets" class="slide">
         <h2>Active Help Desk Tickets</h2>
-        <iframe src="https://www.appsheet.com/start/37945e99-01d5-4dac-ac8f-4ca0f700f77c#view=Open%20Tickets" title="Help Desk Tickets"></iframe>
+        <iframe id="tickets-iframe"
+                src="https://www.appsheet.com/start/37945e99-01d5-4dac-ac8f-4ca0f700f77c#view=Open%20Tickets"
+                data-original-src="https://www.appsheet.com/start/37945e99-01d5-4dac-ac8f-4ca0f700f77c#view=Open%20Tickets"
+                title="Help Desk Tickets">
+        </iframe>
     </div>
 
-    <div id="slide-calendars" class="slide">
+    <div id="slide-calendar-agenda" class="slide"> 
         <h2>Today's Library Agenda & Appointments</h2>
-        <iframe src="https://calendar.google.com/calendar/embed?src=c_7ec31c77de4c2156389d656caffad1a76835fc9544b2063f3b342871538c88ad%40group.calendar.google.com&ctz=America%2FNew_York" style="border-width:0" width="100%" height="100%" frameborder="0" scrolling="no" title="Combined Calendar"></iframe>
-    </div>
-
-    <div id="slide-calendars" class="slide">
-        <h2>Today's Library Agenda & Appointments</h2>
-        <iframe src="https://calendar.google.com/calendar/embed?src=c_c2370403444f72ff9ea54b2e0a43efd7ff0a052bdd9eb88fec98b162eb755b23%40group.calendar.google.com&ctz=America%2FNew_York" style="border-width:0" width="100%" height="100%" frameborder="0" scrolling="no" title="Combined Calendar"></iframe>
+        <iframe id="calendar-iframe"
+                src="YOUR_GOOGLE_CALENDAR_COMBINED_BASE_URL_HERE" 
+                data-original-src="YOUR_GOOGLE_CALENDAR_COMBINED_BASE_URL_HERE"
+                style="border-width:0" width="100%" height="100%" frameborder="0" scrolling="no" title="Combined Calendar">
+        </iframe>
     </div>
 
     <div id="slide-tasks" class="slide">
         <h2>Priority Tasks Needing Completion</h2>
-        <iframe src="https://www.appsheet.com/start/5d47724f-4e0b-49d9-90fb-96af0b4a967a#view=Tasks%20Dashboard" title="Priority Tasks"></iframe>
+        <iframe id="tasks-iframe"
+                src="https://www.appsheet.com/start/5d47724f-4e0b-49d9-90fb-96af0b4a967a#view=Tasks%20Dashboard"
+                data-original-src="https://www.appsheet.com/start/5d47724f-4e0b-49d9-90fb-96af0b4a967a#view=Tasks%20Dashboard"
+                title="Priority Tasks">
+        </iframe>
     </div>
 
     <script>
@@ -139,11 +146,29 @@
             slides.forEach((slide, i) => {
                 if (i === index) {
                     slide.style.display = 'block';
-                    // Optional: Force reload iframe content when slide becomes visible
-                    // This is especially useful for AppSheet iframes to ensure fresh data
+
                     const iframe = slide.querySelector('iframe');
-                    if (iframe && iframe.src) {
-                        iframe.src = iframe.src; // Reloads the iframe by resetting its source
+                    if (iframe) { // Ensure an iframe exists in this slide
+                        // Get the original source from the data-attribute
+                        const originalSrc = iframe.dataset.originalSrc; 
+
+                        // Check if this is the calendar slide
+                        if (slide.id === 'slide-calendar-agenda') { // Corrected ID check here!
+                            const today = new Date();
+                            const year = today.getFullYear();
+                            // Month is 0-indexed, so add 1 and pad with leading zero
+                            const month = String(today.getMonth() + 1).padStart(2, '0'); 
+                            // Get day and pad with leading zero
+                            const day = String(today.getDate()).padStart(2, '0'); 
+                            const todayDateString = `${year}${month}${day}`; // Format: YYYYMMDD
+                            
+                            // Construct the new URL with today's date as start and end
+                            // Appending &mode=agenda to ensure list view, even if not in original base URL
+                            iframe.src = `${originalSrc}&mode=agenda&dates=${todayDateString}/${todayDateString}`;
+                        } else {
+                            // For AppSheet iframes, simply re-set their original source to force a refresh
+                            iframe.src = originalSrc;
+                        }
                     }
                 } else {
                     slide.style.display = 'none';
